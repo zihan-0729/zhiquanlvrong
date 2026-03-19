@@ -8,7 +8,7 @@
 
   const API_URL = '/chat';
 
-  const SYSTEM_PROMPT = `你是"绿融智顾"，智权绿融平台的专属AI助手。智权绿融是一个专注于植物新品种权质押融资的数字化服务平台，面向种业中小企业提供融资申请、价值评估、法律风控和数据分析等服务。
+  const SYSTEM_PROMPT = `你是"小智"，智权绿融平台的专属AI助手。智权绿融是一个专注于植物新品种权质押融资的数字化服务平台，面向种业中小企业提供融资申请、价值评估、法律风控和数据分析等服务。
 
 你的职责：
 1. 解答用户关于植物新品种权质押融资的问题
@@ -406,7 +406,7 @@
       <div id="cw-header">
         <div class="cw-avatar">🌱</div>
         <div class="cw-header-info">
-          <div class="cw-header-name">绿融智顾</div>
+          <div class="cw-header-name">小智</div>
           <div class="cw-header-status">
             <span class="cw-status-dot"></span>
             智能问答顾问 · 随时为您服务
@@ -430,7 +430,7 @@
       <div id="cw-messages">
         <div class="cw-welcome">
           <div class="cw-welcome-icon">🌾</div>
-          <h4>您好，我是绿融智顾！</h4>
+          <h4>您好，我是小智！</h4>
           <p>专注于植物新品种权质押融资领域，可为您解答融资申请、价值评估、法律风控等专业问题。</p>
         </div>
         <div class="cw-divider">快捷提问</div>
