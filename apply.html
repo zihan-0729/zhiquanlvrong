@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>融资申请 — 智权绿融</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --sidebar-bg: #1b3a2d; --sidebar-width: 220px; --topbar-h: 64px;
+      --green-dark: #1b4332; --green-mid: #2d6a4f; --green-light: #52b788;
+      --green-pale: #b7e4c7; --gold: #c9a84c;
+      --bg: #f0f4f2; --white: #ffffff;
+      --card-shadow: 0 2px 12px rgba(27,67,50,0.08);
+      --text-dark: #1a2e23; --text-mid: #4a6358; --text-light: #8a9e94;
+      --blue: #2563eb; --red: #dc2626; --green: #059669; --orange: #d97706;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Noto Sans SC', sans-serif; background: var(--bg); color: var(--text-dark); display: flex; min-height: 100vh; }
+
+    /* Sidebar (shared) */
+    .sidebar { width:var(--sidebar-width); background:var(--sidebar-bg); position:fixed; top:0;left:0;bottom:0;z-index:100; display:flex;flex-direction:column; }
+    .sidebar-logo { display:flex;align-items:center;gap:10px; padding:20px 20px 18px; border-bottom:1px solid rgba(255,255,255,0.06); }
+    .logo-icon { width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--green-light),var(--gold));display:flex;align-items:center;justify-content:center;font-size:16px;color:white; }
+    .logo-text { font-family:'Noto Serif SC',serif;font-size:17px;font-weight:700;color:white;letter-spacing:1px; }
+    .sidebar-nav { flex:1;padding:20px 12px;display:flex;flex-direction:column;gap:4px; }
+    .nav-item { display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;cursor:pointer;color:rgba(255,255,255,0.55);font-size:14px;font-weight:500;text-decoration:none;transition:all 0.2s; }
+    .nav-item:hover { background:rgba(82,183,136,0.1);color:rgba(255,255,255,0.9); }
+    .nav-item.active { background:rgba(82,183,136,0.18);color:var(--green-pale); }
+    .nav-item i { width:18px;font-size:14px;text-align:center; }
+    .nav-divider { height:1px;background:rgba(255,255,255,0.06);margin:10px 0; }
+    .sidebar-footer { padding:16px 20px;border-top:1px solid rgba(255,255,255,0.06); }
+    .user-info { display:flex;align-items:center;gap:10px; }
+    .user-avatar { width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--green-light),var(--gold));display:flex;align-items:center;justify-content:center;font-size:14px;color:white;font-weight:600; }
+    .user-name { font-size:13px;font-weight:600;color:white; }
+    .user-role { font-size:11px;color:rgba(255,255,255,0.45); }
+
+    /* Topbar */
+    .main { margin-left:var(--sidebar-width);flex:1;display:flex;flex-direction:column; }
+    .topbar { height:var(--topbar-h);background:white;position:sticky;top:0;z-index:99;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:1px solid #e8f0ea;box-shadow:0 1px 6px rgba(27,67,50,0.05); }
+    .topbar-left { display:flex;flex-direction:column; }
+    .topbar-title { font-size:18px;font-weight:700;color:var(--text-dark); }
+    .topbar-sub { font-size:12px;color:var(--text-light);margin-top:1px; }
+    .topbar-right { display:flex;align-items:center;gap:16px; }
+    .user-chip { display:flex;align-items:center;gap:8px;cursor:pointer;padding:5px 12px;border-radius:8px;border:1px solid #dde8e0;background:var(--bg); }
+    .user-chip-avatar { width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--green-light),var(--gold));display:flex;align-items:center;justify-content:center;font-size:12px;color:white;font-weight:600; }
+    .user-chip-name { font-size:13px;font-weight:600;color:var(--text-dark); }
+    .topbar-icon { cursor:pointer;color:var(--text-mid);font-size:16px;position:relative; }
+    .badge-dot { position:absolute;top:-3px;right:-3px;width:8px;height:8px;background:var(--red);border-radius:50%;border:2px solid white; }
+
+    /* Content */
+    .content { padding:28px 32px;flex:1; }
+    .page-header { display:flex;justify-content:space-between;align-items:center;margin-bottom:28px; }
+    .page-header h2 { font-family:'Noto Serif SC',serif;font-size:22px;font-weight:700; }
+    .page-header p { font-size:13px;color:var(--text-light);margin-top:4px; }
+    .btn-back { display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-mid);text-decoration:none; transition:color 0.2s; }
+    .btn-back:hover { color:var(--green-dark); }
+
+    /* Steps */
+    .steps { display:flex;align-items:center;gap:0;margin-bottom:32px;background:white;border-radius:12px;padding:20px 28px;box-shadow:var(--card-shadow); }
+    .step { display:flex;align-items:center;gap:12px;flex:1; }
+    .step-num { width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0; }
+    .step.done .step-num { background:var(--green-mid);color:white; }
+    .step.active .step-num { background:var(--green-dark);color:white;box-shadow:0 0 0 4px rgba(82,183,136,0.2); }
+    .step.pending .step-num { background:#f0f4f2;color:var(--text-light);border:2px solid #dde8e0; }
+    .step-info { }
+    .step-label { font-size:13px;font-weight:600;color:var(--text-dark); }
+    .step.pending .step-label { color:var(--text-light); }
+    .step-desc { font-size:11px;color:var(--text-light); }
+    .step-arrow { color:#dde8e0;font-size:14px;margin:0 16px; }
+
+    /* Form */
+    .form-layout { display:grid;grid-template-columns:1fr 320px;gap:24px; }
+    .card { background:white;border-radius:14px;padding:28px;box-shadow:var(--card-shadow);border:1px solid rgba(27,67,50,0.05); }
+    .card-title { font-size:15px;font-weight:700;color:var(--text-dark);margin-bottom:6px; }
+    .card-sub { font-size:12px;color:var(--text-light);margin-bottom:24px; }
+    .form-row { display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px; }
+    .form-group { display:flex;flex-direction:column;gap:6px; }
+    .form-label { font-size:13px;font-weight:600;color:var(--text-mid); }
+    .form-label span { color:var(--red); }
+    .form-input, .form-select, .form-textarea {
+      padding:10px 14px;border:1.5px solid #dde8e0;border-radius:8px;
+      font-size:13px;color:var(--text-dark);font-family:inherit;
+      background:white;outline:none;transition:border-color 0.2s,box-shadow 0.2s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color:var(--green-light);box-shadow:0 0 0 3px rgba(82,183,136,0.12);
+    }
+    .form-textarea { resize:vertical;min-height:90px;line-height:1.6; }
+    .form-hint { font-size:11px;color:var(--text-light); }
+    .input-prefix { display:flex;align-items:center; }
+    .input-prefix span { padding:10px 12px;background:#f0f4f2;border:1.5px solid #dde8e0;border-right:none;border-radius:8px 0 0 8px;font-size:13px;color:var(--text-mid); }
+    .input-prefix input { border-radius:0 8px 8px 0;flex:1; }
+    .slider-wrap { display:flex;flex-direction:column;gap:8px; }
+    .slider { width:100%;-webkit-appearance:none;appearance:none;height:5px;border-radius:3px;background:linear-gradient(90deg,var(--green-light) 60%,#e8f0ea 60%);outline:none; }
+    .slider::-webkit-slider-thumb { -webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--green-dark);cursor:pointer;box-shadow:0 2px 6px rgba(27,67,50,0.3); }
+    .slider-labels { display:flex;justify-content:space-between;font-size:11px;color:var(--text-light); }
+    .slider-value { font-size:16px;font-weight:700;color:var(--green-dark); }
+    .upload-area {
+      border:2px dashed #c8ddd0;border-radius:10px;padding:28px;text-align:center;cursor:pointer;
+      transition:all 0.2s;background:#fafcfa;
+    }
+    .upload-area:hover { border-color:var(--green-light);background:#f0faf5; }
+    .upload-area i { font-size:28px;color:var(--green-light);margin-bottom:10px; }
+    .upload-area p { font-size:13px;color:var(--text-mid); }
+    .upload-area small { font-size:11px;color:var(--text-light); }
+
+    /* Sidebar info */
+    .info-card { background:white;border-radius:14px;padding:24px;box-shadow:var(--card-shadow);margin-bottom:20px; }
+    .info-list { display:flex;flex-direction:column;gap:14px; }
+    .info-item { display:flex;gap:12px;align-items:flex-start; }
+    .info-icon { width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px; }
+    .info-text h4 { font-size:13px;font-weight:600;color:var(--text-dark); }
+    .info-text p { font-size:12px;color:var(--text-light);margin-top:2px;line-height:1.5; }
+    .progress-card { background:linear-gradient(135deg,var(--green-dark),var(--green-mid));border-radius:14px;padding:24px;color:white;margin-bottom:20px; }
+    .progress-card h4 { font-size:14px;font-weight:600;margin-bottom:16px;opacity:0.9; }
+    .progress-item { display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:10px; }
+    .progress-bar { height:6px;background:rgba(255,255,255,0.2);border-radius:3px;margin-top:6px;overflow:hidden; }
+    .progress-fill { height:100%;border-radius:3px;background:var(--green-light); }
+
+    /* Buttons */
+    .form-actions { display:flex;gap:12px;justify-content:flex-end;margin-top:28px;padding-top:24px;border-top:1px solid #f0f4f2; }
+    .btn { padding:11px 28px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all 0.2s;text-decoration:none;display:inline-flex;align-items:center;gap:8px; }
+    .btn-outline { background:white;color:var(--text-mid);border:1.5px solid #dde8e0; }
+    .btn-outline:hover { border-color:var(--green-light);color:var(--green-dark); }
+    .btn-primary { background:linear-gradient(135deg,var(--green-light),var(--green-mid));color:white;box-shadow:0 3px 12px rgba(82,183,136,0.35); }
+    .btn-primary:hover { transform:translateY(-1px);box-shadow:0 5px 18px rgba(82,183,136,0.45); }
+
+    /* Modal */
+    .modal-overlay { display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center; }
+    .modal-overlay.show { display:flex; }
+    .modal { background:white;border-radius:20px;padding:40px;max-width:420px;width:90%;text-align:center;animation:modalIn 0.35s ease; }
+    @keyframes modalIn { from{opacity:0;transform:scale(0.9)} to{opacity:1;transform:scale(1)} }
+    .modal-icon { width:72px;height:72px;border-radius:50%;background:var(--green-bg,#ecfdf5);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px;color:var(--green); }
+    .modal h3 { font-family:'Noto Serif SC',serif;font-size:22px;font-weight:700;margin-bottom:10px; }
+    .modal p { font-size:14px;color:var(--text-light);line-height:1.7;margin-bottom:24px; }
+    .modal-id { background:#f0faf5;border-radius:8px;padding:12px 20px;font-size:16px;font-weight:700;color:var(--green-dark);margin-bottom:24px; }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon"><i class="fas fa-seedling"></i></div>
+      <span class="logo-text">智权绿融</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item"><i class="fas fa-th-large"></i> 工作台总览</a>
+      <a href="data-center.html" class="nav-item"><i class="fas fa-chart-bar"></i> 数据分析</a>
+      <a href="apply.html" class="nav-item active"><i class="fas fa-file-alt"></i> 项目管理</a>
+      <a href="#" class="nav-item"><i class="fas fa-building"></i> 企业管理</a>
+      <a href="#" class="nav-item"><i class="fas fa-tasks"></i> 进度跟踪</a>
+      <div class="nav-divider"></div>
+      <a href="risk.html" class="nav-item"><i class="fas fa-shield-alt"></i> 风险监控</a>
+      <a href="evaluation.html" class="nav-item"><i class="fas fa-star"></i> 评估报告</a>
+      <div class="nav-divider"></div>
+      <a href="index.html" class="nav-item"><i class="fas fa-home"></i> 返回首页</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">张</div>
+        <div><div class="user-name">张经理</div><div class="user-role">高级风控专员</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title">融资申请</div>
+        <div class="topbar-sub">提交植物新品种权质押融资申请</div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-icon"><i class="fas fa-bell"></i><span class="badge-dot"></span></div>
+        <div class="user-chip">
+          <div class="user-chip-avatar">张</div>
+          <span class="user-chip-name">张经理</span>
+          <i class="fas fa-chevron-down" style="font-size:10px;color:var(--text-light)"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="page-header">
+        <div>
+          <h2>新建融资申请</h2>
+          <p>请填写完整的企业信息和质押品种信息，我们将在48小时内完成评估</p>
+        </div>
+        <a href="dashboard.html" class="btn-back"><i class="fas fa-arrow-left"></i> 返回工作台</a>
+      </div>
+
+      <!-- Steps -->
+      <div class="steps">
+        <div class="step done">
+          <div class="step-num"><i class="fas fa-check" style="font-size:11px"></i></div>
+          <div class="step-info"><div class="step-label">企业信息</div><div class="step-desc">基本资料</div></div>
+        </div>
+        <div class="step-arrow"><i class="fas fa-chevron-right"></i></div>
+        <div class="step active">
+          <div class="step-num">2</div>
+          <div class="step-info"><div class="step-label">品种资料</div><div class="step-desc">质押品种信息</div></div>
+        </div>
+        <div class="step-arrow"><i class="fas fa-chevron-right"></i></div>
+        <div class="step pending">
+          <div class="step-num">3</div>
+          <div class="step-info"><div class="step-label">融资需求</div><div class="step-desc">金额与期限</div></div>
+        </div>
+        <div class="step-arrow"><i class="fas fa-chevron-right"></i></div>
+        <div class="step pending">
+          <div class="step-num">4</div>
+          <div class="step-info"><div class="step-label">提交审核</div><div class="step-desc">确认提交</div></div>
+        </div>
+      </div>
+
+      <div class="form-layout">
+        <div>
+          <!-- 企业信息 -->
+          <div class="card" style="margin-bottom:20px">
+            <div class="card-title">企业基本信息</div>
+            <div class="card-sub">请填写真实有效的企业注册信息</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">企业名称 <span>*</span></label>
+                <input type="text" class="form-input" placeholder="请输入营业执照注册名称" value="云南农业科技有限公司">
+              </div>
+              <div class="form-group">
+                <label class="form-label">统一社会信用代码 <span>*</span></label>
+                <input type="text" class="form-input" placeholder="18位信用代码" value="91530000MA6XXXXXXX">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">企业类型 <span>*</span></label>
+                <select class="form-select">
+                  <option>种业企业</option>
+                  <option>农业科技企业</option>
+                  <option selected>种子研发机构</option>
+                  <option>科研院所</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">注册资本（万元）</label>
+                <input type="number" class="form-input" placeholder="请输入注册资本" value="1000">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">法定代表人 <span>*</span></label>
+                <input type="text" class="form-input" placeholder="请输入姓名" value="李明">
+              </div>
+              <div class="form-group">
+                <label class="form-label">联系电话 <span>*</span></label>
+                <input type="tel" class="form-input" placeholder="请输入手机号码" value="138 0000 0000">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">企业地址</label>
+              <input type="text" class="form-input" placeholder="请输入详细地址" value="云南省昆明市高新技术开发区科技路88号">
+            </div>
+          </div>
+
+          <!-- 品种信息 -->
+          <div class="card" style="margin-bottom:20px">
+            <div class="card-title">质押品种信息</div>
+            <div class="card-sub">填写拟质押的植物新品种权相关信息</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">品种名称 <span>*</span></label>
+                <input type="text" class="form-input" placeholder="请输入品种名称" value="云农优质小麦1号">
+              </div>
+              <div class="form-group">
+                <label class="form-label">品种权证书号 <span>*</span></label>
+                <input type="text" class="form-input" placeholder="例：CNA20230001" value="CNA20231234">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">作物种类 <span>*</span></label>
+                <select class="form-select">
+                  <option>水稻</option>
+                  <option selected>小麦</option>
+                  <option>玉米</option>
+                  <option>大豆</option>
+                  <option>棉花</option>
+                  <option>蔬菜类</option>
+                  <option>其他</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">授权日期</label>
+                <input type="date" class="form-input" value="2021-06-15">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">品种权有效期至</label>
+                <input type="date" class="form-input" value="2036-06-15">
+              </div>
+              <div class="form-group">
+                <label class="form-label">年推广面积（万亩）</label>
+                <input type="number" class="form-input" placeholder="请输入推广面积" value="12.5">
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:18px">
+              <label class="form-label">品种特征描述</label>
+              <textarea class="form-textarea" placeholder="请描述该品种的主要特征、优势及市场表现...">云农优质小麦1号具有抗旱、高产、优质的特点，适合云贵高原气候条件种植。平均亩产550-620公斤，较当地主栽品种增产15%，深受当地农户欢迎。</textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">品种权证书（上传文件）</label>
+              <div class="upload-area" onclick="this.querySelector('input').click()">
+                <input type="file" style="display:none" accept=".pdf,.jpg,.png">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>点击或拖拽文件到此处上传</p>
+                <small>支持 PDF、JPG、PNG 格式，文件大小不超过 10MB</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- 融资需求 -->
+          <div class="card">
+            <div class="card-title">融资需求信息</div>
+            <div class="card-sub">请填写您的融资金额和期限要求</div>
+            <div class="form-group" style="margin-bottom:22px">
+              <label class="form-label">申请融资金额（万元）<span>*</span></label>
+              <div class="slider-wrap">
+                <div class="slider-value" id="sliderVal">50 万元</div>
+                <input type="range" class="slider" id="amountSlider" min="10" max="500" value="50" step="10" oninput="document.getElementById('sliderVal').textContent=this.value+' 万元'">
+                <div class="slider-labels"><span>10万</span><span>100万</span><span>200万</span><span>500万</span></div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">融资期限 <span>*</span></label>
+                <select class="form-select">
+                  <option>6个月</option>
+                  <option selected>12个月</option>
+                  <option>24个月</option>
+                  <option>36个月</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">资金用途 <span>*</span></label>
+                <select class="form-select">
+                  <option selected>种子扩繁生产</option>
+                  <option>研发投入</option>
+                  <option>市场推广</option>
+                  <option>流动资金</option>
+                  <option>设备采购</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">补充说明</label>
+              <textarea class="form-textarea" placeholder="如有特殊融资需求或说明，请在此填写..."></textarea>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-outline" onclick="history.back()"><i class="fas fa-save"></i> 保存草稿</button>
+              <button class="btn btn-primary" onclick="document.querySelector('.modal-overlay').classList.add('show')"><i class="fas fa-paper-plane"></i> 提交申请</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div>
+          <div class="progress-card">
+            <h4><i class="fas fa-tasks" style="margin-right:6px"></i>申请完成度</h4>
+            <div style="font-size:32px;font-weight:700;margin-bottom:16px">75%</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div>
+            <div style="font-size:11px;opacity:0.7;margin-top:8px">还需填写：融资需求信息</div>
+          </div>
+          <div class="info-card">
+            <div class="card-title" style="margin-bottom:16px">申请须知</div>
+            <div class="info-list">
+              <div class="info-item">
+                <div class="info-icon" style="background:#ecfdf5"><i class="fas fa-clock" style="color:var(--green)"></i></div>
+                <div class="info-text"><h4>评估时效</h4><p>提交后48小时内完成初步评估，5个工作日内出具正式报告</p></div>
+              </div>
+              <div class="info-item">
+                <div class="info-icon" style="background:#eff6ff"><i class="fas fa-file-check" style="color:var(--blue)"></i></div>
+                <div class="info-text"><h4>所需材料</h4><p>品种权证书、推广面积证明、近三年财务报表</p></div>
+              </div>
+              <div class="info-item">
+                <div class="info-icon" style="background:#fffbeb"><i class="fas fa-shield-alt" style="color:var(--orange)"></i></div>
+                <div class="info-text"><h4>数据保密</h4><p>所有申请信息严格保密，受法律保护</p></div>
+              </div>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="card-title" style="margin-bottom:12px">往期融资案例</div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="padding:12px;background:#f7faf8;border-radius:8px;border-left:3px solid var(--green-light)">
+                <div style="font-size:13px;font-weight:600;color:var(--text-dark)">四川现代农业集团</div>
+                <div style="font-size:12px;color:var(--text-light);margin-top:2px">玉米品种权质押 · 融资 120万元</div>
+                <div style="font-size:11px;color:var(--green);margin-top:4px"><i class="fas fa-check"></i> 3个工作日完成放款</div>
+              </div>
+              <div style="padding:12px;background:#f7faf8;border-radius:8px;border-left:3px solid var(--gold)">
+                <div style="font-size:13px;font-weight:600;color:var(--text-dark)">北方农作物研究院</div>
+                <div style="font-size:12px;color:var(--text-light);margin-top:2px">水稻品种权质押 · 融资 80万元</div>
+                <div style="font-size:11px;color:var(--green);margin-top:4px"><i class="fas fa-check"></i> 已成功还款</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay">
+    <div class="modal">
+      <div class="modal-icon"><i class="fas fa-check"></i></div>
+      <h3>申请提交成功！</h3>
+      <p>您的融资申请已成功提交，我们的专业团队将在48小时内完成初步评估并与您联系。</p>
+      <div class="modal-id">申请编号：ZQ-2024-001234</div>
+      <div style="display:flex;gap:12px;justify-content:center">
+        <a href="dashboard.html" class="btn btn-outline">返回工作台</a>
+        <a href="evaluation.html" class="btn btn-primary">查看评估进度</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

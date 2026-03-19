@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录 — 智权绿融</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root{--green-dark:#1b4332;--green-mid:#2d6a4f;--green-light:#52b788;--green-pale:#b7e4c7;--gold:#c9a84c;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Noto Sans SC',sans-serif;min-height:100vh;display:flex;background:#0d1f17;}
+    .login-left{flex:1;background:linear-gradient(160deg,#0d2b1e,#1b4332 50%,#2d5a3d);position:relative;display:flex;align-items:center;justify-content:center;padding:60px;overflow:hidden;}
+    .login-left::before{content:'';position:absolute;inset:0;background-image:radial-gradient(ellipse 60% 50% at 60% 40%,rgba(82,183,136,0.18) 0%,transparent 60%);}
+    .login-left-grid{position:absolute;inset:0;opacity:0.04;background-image:linear-gradient(rgba(255,255,255,0.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.5) 1px,transparent 1px);background-size:48px 48px;}
+    .left-content{position:relative;z-index:1;max-width:420px;}
+    .left-logo{display:flex;align-items:center;gap:12px;margin-bottom:48px;}
+    .left-logo-icon{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--green-light),var(--gold));display:flex;align-items:center;justify-content:center;font-size:20px;color:white;}
+    .left-logo-text{font-family:'Noto Serif SC',serif;font-size:22px;font-weight:700;color:white;letter-spacing:2px;}
+    .left-title{font-family:'Noto Serif SC',serif;font-size:40px;font-weight:700;color:white;line-height:1.25;margin-bottom:20px;}
+    .left-title span{color:var(--green-light);}
+    .left-desc{font-size:15px;color:rgba(255,255,255,0.6);line-height:1.8;margin-bottom:48px;}
+    .left-stats{display:flex;gap:0;border:1px solid rgba(82,183,136,0.2);border-radius:14px;overflow:hidden;background:rgba(255,255,255,0.04);}
+    .ls-item{flex:1;padding:20px 16px;text-align:center;border-right:1px solid rgba(82,183,136,0.15);}
+    .ls-item:last-child{border-right:none;}
+    .ls-val{font-family:'Noto Serif SC',serif;font-size:22px;font-weight:700;color:white;margin-bottom:4px;}
+    .ls-label{font-size:11px;color:rgba(255,255,255,0.5);}
+
+    /* Login panel */
+    .login-right{width:460px;background:white;display:flex;align-items:center;justify-content:center;padding:60px 48px;}
+    .login-form-wrap{width:100%;}
+    .login-form-wrap h2{font-family:'Noto Serif SC',serif;font-size:28px;font-weight:700;color:#1a2e23;margin-bottom:8px;}
+    .login-form-wrap p{font-size:14px;color:#8a9e94;margin-bottom:36px;}
+    .tabs{display:flex;border-bottom:2px solid #f0f4f2;margin-bottom:28px;}
+    .tab{padding:8px 20px;font-size:14px;font-weight:600;color:#8a9e94;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.2s;}
+    .tab.active{color:var(--green-dark);border-bottom-color:var(--green-light);}
+    .form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:18px;}
+    .form-label{font-size:13px;font-weight:600;color:#4a6358;}
+    .input-wrap{position:relative;}
+    .input-wrap i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#8a9e94;font-size:14px;}
+    .form-input{width:100%;padding:11px 14px 11px 38px;border:1.5px solid #dde8e0;border-radius:8px;font-size:14px;color:#1a2e23;font-family:inherit;outline:none;transition:all 0.2s;}
+    .form-input:focus{border-color:var(--green-light);box-shadow:0 0 0 3px rgba(82,183,136,0.12);}
+    .form-row-end{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
+    .checkbox-wrap{display:flex;align-items:center;gap:8px;font-size:13px;color:#4a6358;cursor:pointer;}
+    .form-link{font-size:13px;color:var(--green-mid);text-decoration:none;}
+    .btn-login{width:100%;padding:13px;background:linear-gradient(135deg,var(--green-light),var(--green-mid));color:white;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.3s;box-shadow:0 3px 14px rgba(82,183,136,0.35);}
+    .btn-login:hover{transform:translateY(-1px);box-shadow:0 5px 20px rgba(82,183,136,0.45);}
+    .divider{display:flex;align-items:center;gap:12px;margin:24px 0;color:#8a9e94;font-size:12px;}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:#f0f4f2;}
+    .demo-box{background:#f7faf8;border-radius:10px;padding:16px;border:1px dashed #c8ddd0;}
+    .demo-box h4{font-size:13px;font-weight:600;color:#4a6358;margin-bottom:10px;}
+    .demo-item{display:flex;justify-content:space-between;font-size:12px;color:#8a9e94;margin-bottom:6px;}
+    .demo-item:last-child{margin-bottom:0;}
+    .demo-val{font-family:monospace;color:#1a2e23;font-weight:600;}
+    .register-hint{text-align:center;margin-top:24px;font-size:13px;color:#8a9e94;}
+    .register-hint a{color:var(--green-mid);text-decoration:none;font-weight:600;}
+    .error-msg{display:none;background:#fef2f2;color:#dc2626;font-size:13px;padding:10px 14px;border-radius:8px;margin-bottom:16px;}
+  </style>
+</head>
+<body>
+  <!-- LEFT -->
+  <div class="login-left">
+    <div class="login-left-grid"></div>
+    <div class="left-content">
+      <div class="left-logo">
+        <div class="left-logo-icon"><i class="fas fa-seedling"></i></div>
+        <span class="left-logo-text">智权绿融</span>
+      </div>
+      <h1 class="left-title">植物新品种权<br><span>质押融资</span>平台</h1>
+      <p class="left-desc">以科技创新推动农业金融发展，让种业中小企业的知识产权资产成为有力的融资杠杆，助力乡村振兴。</p>
+      <div class="left-stats">
+        <div class="ls-item">
+          <div class="ls-val">298.5<span style="font-size:14px">亿</span></div>
+          <div class="ls-label">累计交易额</div>
+        </div>
+        <div class="ls-item">
+          <div class="ls-val">1,234</div>
+          <div class="ls-label">合作机构</div>
+        </div>
+        <div class="ls-item">
+          <div class="ls-val">94.2<span style="font-size:14px">%</span></div>
+          <div class="ls-label">融资成功率</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="login-right">
+    <div class="login-form-wrap">
+      <h2>欢迎登录</h2>
+      <p>请使用您的账号登录智权绿融平台</p>
+
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab(0,this)">企业账号</div>
+        <div class="tab" onclick="switchTab(1,this)">管理员</div>
+      </div>
+
+      <div id="errorMsg" class="error-msg"><i class="fas fa-exclamation-circle" style="margin-right:6px"></i>账号或密码错误，请重试</div>
+
+      <div class="form-group">
+        <label class="form-label">账号</label>
+        <div class="input-wrap">
+          <i class="fas fa-user"></i>
+          <input type="text" class="form-input" id="username" placeholder="请输入企业账号或手机号" value="admin">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">密码</label>
+        <div class="input-wrap">
+          <i class="fas fa-lock"></i>
+          <input type="password" class="form-input" id="password" placeholder="请输入密码" value="123456">
+        </div>
+      </div>
+      <div class="form-row-end">
+        <label class="checkbox-wrap">
+          <input type="checkbox" checked style="accent-color:var(--green-mid)"> 记住我
+        </label>
+        <a href="#" class="form-link">忘记密码？</a>
+      </div>
+      <button class="btn-login" onclick="doLogin()">登 录</button>
+
+      <div class="divider">演示账号</div>
+      <div class="demo-box">
+        <h4><i class="fas fa-info-circle" style="margin-right:4px;color:var(--green-mid)"></i>演示用账号（直接点击登录即可）</h4>
+        <div class="demo-item"><span>账号</span><span class="demo-val">admin</span></div>
+        <div class="demo-item"><span>密码</span><span class="demo-val">123456</span></div>
+      </div>
+      <div class="register-hint">还没有账号？<a href="#">立即注册</a></div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(idx, el){
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('username').placeholder = idx === 0 ? '请输入企业账号或手机号' : '请输入管理员账号';
+    }
+    function doLogin(){
+      const u = document.getElementById('username').value;
+      const p = document.getElementById('password').value;
+      const err = document.getElementById('errorMsg');
+      if(u === 'admin' && p === '123456'){
+        document.querySelector('.btn-login').textContent = '登录中...';
+        setTimeout(()=>{ window.location.href = 'dashboard.html'; }, 800);
+      } else {
+        err.style.display = 'block';
+        setTimeout(()=>{ err.style.display = 'none'; }, 3000);
+      }
+    }
+    document.addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+  </script>
+</body>
+</html>
