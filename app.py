@@ -1,5 +1,5 @@
 # =============================================
-#  智谱AI 聊天代理服务器 + 静态网页托管
+#  智谱AI 聊天代理服务器 + 静态网页托管 (最终稳定版)
 # =============================================
 
 from flask import Flask, request, jsonify, Response, stream_with_context
@@ -8,26 +8,20 @@ import requests
 import json
 import os
 
-# 将当前目录设为静态文件目录，这样Flask就能直接读取同目录下的html文件
+# static_url_path='' 会让 Flask 自动、完美地处理所有 html, js 和图片，绝不冲突
 app = Flask(__name__, static_folder='.', static_url_path='')
-CORS(app)
+CORS(app) 
 
+# ⚠️ 保持你的 API Key 不变
 ZHIPU_API_KEY = "5f2d94845b9a47008288ada87e021d27.ProEHjpiEbGvKtcc"
 ZHIPU_API_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
 
-# 新增：当评委访问根目录时，默认展示 index.html
+# 只保留这一个针对访问“纯网址（根目录）”的引导即可
 @app.route('/')
 def home():
     return app.send_static_file('index.html')
 
-# 新增：当评委访问其他页面（如 chat.html, apply.html 或 js 文件）时，自动返回对应文件
-@app.route('/<path:path>')
-def serve_static(path):
-    if os.path.exists(path):
-        return app.send_static_file(path)
-    return "页面未找到", 404
-
-# 原有的聊天接口保持不变
+# 聊天接口保持完全不变
 @app.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json()
@@ -39,7 +33,7 @@ def chat():
     }
 
     payload = {
-        "model": "glm-4-flash",
+        "model": "glm-4-flash", 
         "messages": messages,
         "stream": True,
     }
@@ -82,6 +76,5 @@ def chat():
     )
 
 if __name__ == "__main__":
-    # 动态获取云端分配的端口，如果没有则默认5000（这是云端部署必须的一步）
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=False)
